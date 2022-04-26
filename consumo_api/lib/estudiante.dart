@@ -38,5 +38,9 @@ class Estudiante {
     return correo;
   }
 
+  String getDatosCompletos(){
+    return "(Matricula:$matricula) - (Nombre:$nombre) - (Carrera:$carrera) - (Semestre:$semestre) - (Telefono:$telefono) - (Correo:$correo)";
+  }
+
 
 }

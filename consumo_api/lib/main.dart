@@ -3,8 +3,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'listaEstudiantes.dart';
 import 'estudiante.dart';
 
@@ -18,9 +16,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  List estudiantesDatos = [];
-
   List<Estudiante> estudiantes = [];
+
+  List obtenerDatos = [];
 
   @override
   void initState() {
@@ -32,16 +30,16 @@ class _MyAppState extends State<MyApp> {
     final String datosLeidos = await rootBundle.loadString('db.json');
     final datosDecodificados = await json.decode(datosLeidos);
     setState(() {
-      estudiantesDatos = datosDecodificados["estudiantes"];
-      for (var i = 0; i < estudiantesDatos.length; i++) {
+      obtenerDatos = datosDecodificados["estudiantes"];
+      for (var i = 0; i < obtenerDatos.length; i++) {
         estudiantes.add(Estudiante(
-            matricula: estudiantesDatos[i]["matricula"],
-            nombre: estudiantesDatos[i]["nombre"],
-            carrera: estudiantesDatos[i]["carrera"],
-            semestre: estudiantesDatos[i]["semestre"],
-            telefono: estudiantesDatos[i]["telefono"],
-            correo: estudiantesDatos[i]["correo"]));
-
+            matricula: obtenerDatos[i]["matricula"],
+            nombre: obtenerDatos[i]["nombre"],
+            carrera: obtenerDatos[i]["carrera"],
+            semestre: obtenerDatos[i]["semestre"],
+            telefono: obtenerDatos[i]["telefono"],
+            correo: obtenerDatos[i]["correo"]));
+        //print(estudiantes[i].getDatosCompletos());
       }
     });
   }
