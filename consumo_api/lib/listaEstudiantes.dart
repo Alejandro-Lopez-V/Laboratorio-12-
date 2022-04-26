@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'estudiante.dart';
+import 'datosEstudiante.dart';
 
 
 class listaEstudiantes extends StatelessWidget {
@@ -14,7 +15,11 @@ class listaEstudiantes extends StatelessWidget {
       children: estudiantes.map((alumno){
         return InkWell(
           onTap: () {
-            print("presionado");
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => DatosEstudiante(
+                  estudiantes[estudiantes.indexOf(alumno)]
+                ))
+            );
           },
           child: Container(
             decoration: BoxDecoration(
