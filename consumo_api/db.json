@@ -1,0 +1,36 @@
+{
+  "estudiantes": [
+    {
+      "matricula" : "18760444",
+      "nombre" : "Alejandro Lopez",
+      "carrera" : "Ingenieria en Sistemas Computacionales",
+      "semestre" : "8",
+      "telefono" : "123-123-1234",
+      "correo" : "al18760444@ite.edu.mx"
+    },
+    {
+      "matricula" : "18760500",
+      "nombre" : "Roberto Cortez",
+      "carrera" : "Ingenieria en Sistemas Computacionales",
+      "semestre" : "6",
+      "telefono" : "555-555-5555",
+      "correo" : "al18760500@ite.edu.mx"
+    },
+    {
+      "matricula" : "18760536",
+      "nombre" : "Rodrigo Soto",
+      "carrera" : "Ingenieria Industrial",
+      "semestre" : "4",
+      "telefono" : "535-535-5335",
+      "correo" : "al18760536@ite.edu.mx"
+    },
+    {
+      "matricula" : "18760387",
+      "nombre" : "Isabella Guerrero",
+      "carrera" : "Ingenieria Industrial",
+      "semestre" : "2",
+      "telefono" : "111-222-3333",
+      "correo" : "al18760387@ite.edu.mx"
+    }
+  ]
+}
