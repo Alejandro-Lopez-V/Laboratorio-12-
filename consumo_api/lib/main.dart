@@ -2,42 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-
-Future<Album> fetchAlbum() async {
-  final response = await http
-      .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
-
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    return Album.fromJson(jsonDecode(response.body));
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load album');
-  }
-}
-
-class Album {
-  final int userId;
-  final int id;
-  final String title;
-
-  const Album({
-    required this.userId,
-    required this.id,
-    required this.title,
-  });
-
-  factory Album.fromJson(Map<String, dynamic> json) {
-    return Album(
-      userId: json['userId'],
-      id: json['id'],
-      title: json['title'],
-    );
-  }
-}
+import 'dart:convert';
+import 'listaEstudiantes.dart';
+import 'estudiante.dart';
 
 void main() => runApp(const MyApp());
 
@@ -49,41 +18,48 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late Future<Album>? futureAlbum;
+  List estudiantesDatos = [];
+
+  List<Estudiante> estudiantes = [];
 
   @override
   void initState() {
     super.initState();
-    futureAlbum = fetchAlbum();
+    WidgetsBinding.instance!.addPostFrameCallback((_) => leerJson(context));
+  }
+
+  Future<void> leerJson(BuildContext context) async {
+    final String datosLeidos = await rootBundle.loadString('db.json');
+    final datosDecodificados = await json.decode(datosLeidos);
+    setState(() {
+      estudiantesDatos = datosDecodificados["estudiantes"];
+      for (var i = 0; i < estudiantesDatos.length; i++) {
+        estudiantes.add(Estudiante(
+            matricula: estudiantesDatos[i]["matricula"],
+            nombre: estudiantesDatos[i]["nombre"],
+            carrera: estudiantesDatos[i]["carrera"],
+            semestre: estudiantesDatos[i]["semestre"],
+            telefono: estudiantesDatos[i]["telefono"],
+            correo: estudiantesDatos[i]["correo"]));
+
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Fetch Data Example',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Fetch Data Example'),
+          title: const Text('Fetch Data Ejemplo'),
         ),
-        body: Center(
-          child: FutureBuilder<Album>(
-            future: futureAlbum,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Text(snapshot.data!.title);
-              } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
-
-              // By default, show a loading spinner.
-              return const CircularProgressIndicator();
-            },
-          ),
+        body: ListView(
+          children: [
+            listaEstudiantes(estudiantes),
+          ],
         ),
       ),
     );
   }
 }
+
