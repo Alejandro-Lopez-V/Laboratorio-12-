@@ -17,7 +17,7 @@ class listaEstudiantes extends StatelessWidget {
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => DatosEstudiante(
-                  estudiantes[estudiantes.indexOf(alumno)]
+                    estudiantes[estudiantes.indexOf(alumno)]
                 ))
             );
           },

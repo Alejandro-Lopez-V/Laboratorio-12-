@@ -1,8 +1,7 @@
-import 'dart:async';
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'listaEstudiantes.dart';
 import 'estudiante.dart';
 
@@ -18,31 +17,35 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   List<Estudiante> estudiantes = [];
 
-  List obtenerDatos = [];
+  void fetchPersonas() async {
+    final response = await http
+        .get(Uri.parse('https://primer-rest-api-18bb3-default-rtdb.firebaseio.com/Persona.json'));
+
+    final Map<String, dynamic> data = json.decode(response.body);
+
+    if (response.statusCode == 200) {
+      for(var i = 1; i <= data.length; i++){
+        estudiantes.add(Estudiante(
+            matricula: data["00${i}Estudiante"]["matricula"],
+            nombre: data["00${i}Estudiante"]["nombre"],
+            carrera: data["00${i}Estudiante"]["carrera"],
+            semestre: data["00${i}Estudiante"]["semestre"],
+            telefono: data["00${i}Estudiante"]["telefono"],
+            correo: data["00${i}Estudiante"]["correo"]));
+      }
+
+    } else {
+      throw Exception('No se pudo cargar el archivo json');
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) => leerJson(context));
+    fetchPersonas();
   }
 
-  Future<void> leerJson(BuildContext context) async {
-    final String datosLeidos = await rootBundle.loadString('db.json');
-    final datosDecodificados = await json.decode(datosLeidos);
-    setState(() {
-      obtenerDatos = datosDecodificados["estudiantes"];
-      for (var i = 0; i < obtenerDatos.length; i++) {
-        estudiantes.add(Estudiante(
-            matricula: obtenerDatos[i]["matricula"],
-            nombre: obtenerDatos[i]["nombre"],
-            carrera: obtenerDatos[i]["carrera"],
-            semestre: obtenerDatos[i]["semestre"],
-            telefono: obtenerDatos[i]["telefono"],
-            correo: obtenerDatos[i]["correo"]));
-        //print(estudiantes[i].getDatosCompletos());
-      }
-    });
-  }
+
 
   @override
   Widget build(BuildContext context) {
